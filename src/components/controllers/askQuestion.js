@@ -1,19 +1,29 @@
 import React, { useState } from 'react'
 
-function AskScreen () {
-    const [question, setQuestion] = useState('')
+import logo from "../../KworahLogo.jpg"
 
-    async function getState () {
-        await fetch('http://127.0.0.1:8000/quoraBase/questions', {method: 'GET'})
-            .then(response => response.json())
-            .then(json => setQuestion(json))
-            .then(console.log(question))
+import { questions } from "../model/questions.js"
+
+function AskScreen () {
+    const [questionPost, setQuestionPost] = useState('')
+    const [questionGet, setQuestionGet] = useState([])
+
+    async function getQ () {
+        questions("GET", {})
+            .then(resp => setQuestionGet(resp))
+            .then(console.log(questionGet))
+    }
+
+    async function postQ () {
+        questions("POST", {q_text: "When is Christmas?", q_author: "bsun"})
     }
 
     return (
         <div>
-            <input type="text" placeholder="Ask a question!" onChange={e => setQuestion(e.target.value)} />
-            <button onClick={getState}>Post!</button>
+            <img src={logo} alt="Kworah - Get Your Answers Here!" />
+            <input type="text" placeholder="Ask a question!" onChange={e => setQuestionPost(e.target.value)} />
+            <button onClick={postQ}>Post a Question!</button>
+            <button onClick={getQ}>Get Questions!</button>
         </div>
     )
 }
