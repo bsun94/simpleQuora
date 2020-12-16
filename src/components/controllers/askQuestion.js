@@ -9,13 +9,13 @@ function AskScreen () {
     const [questionGet, setQuestionGet] = useState([])
 
     async function getQ () {
-        questions("GET", {})
+        questions("GET", {"q_creation_time": 1})
             .then(resp => setQuestionGet(resp))
             .then(console.log(questionGet))
     }
 
     async function postQ () {
-        questions("POST", {q_text: "When is Christmas?", q_author: "bsun"})
+        questions("POST", {"q_text": "When is Christmas?", "q_author": "ppatel"})
     }
 
     return (
