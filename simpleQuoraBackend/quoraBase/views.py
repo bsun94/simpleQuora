@@ -36,7 +36,7 @@ def questions(request):
         return Response(serializer.errors, status=400)
     
     elif request.method == 'DELETE':
-        id = request.GET.get("q_id")
+        id = request.data.get("q_id")
         if id:
             try:
                 query = Questions.objects.get(pk=id)
@@ -49,11 +49,11 @@ def questions(request):
 
     elif request.method == 'PATCH':
         try:
-            vote = int(request.GET.get("q_votes"))
+            vote = int(request.data.get("q_votes"))
         except:
             return Response({"Error": "Invalid input for votes"}, status=400)
         
-        id = request.GET.get("q_id")
+        id = request.data.get("q_id")
         if id:
             try:
                 query = Questions.objects.filter(pk=id).update(q_votes=vote)
