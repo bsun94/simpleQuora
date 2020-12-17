@@ -48,6 +48,7 @@ def questions(request):
         return Response({"Error": "Invalid input for ID"}, status=404)
 
     elif request.method == 'PATCH':
+        # Patching only done for voting
         try:
             vote = int(request.data.get("q_votes"))
         except:
@@ -57,7 +58,6 @@ def questions(request):
         if id:
             try:
                 query = Questions.objects.filter(pk=id).update(q_votes=vote)
+                return Response({"Success": "Record updated"}, status=200)
             except:
                 return Response({"Error": "Stated ID does not exist"}, status=400)
-        
-        return Response({"Success": "Record updated"}, status=200)

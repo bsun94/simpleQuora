@@ -7,7 +7,7 @@ export async function questions(method, data) {
 
             Object.entries(data).forEach(entry => {
                 let [key, value] = entry
-                query += key + '=' + value
+                query += key + '=' + value + '&'
             });
 
             url.search = query
@@ -27,7 +27,7 @@ export async function questions(method, data) {
         })
         
         return await response.json()
-        
+
     }
 
 }
