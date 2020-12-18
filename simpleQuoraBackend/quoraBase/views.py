@@ -22,8 +22,9 @@ def questions(request):
                     query = Questions.objects.filter(
                         q_creation_time__gte=date.today()-timedelta(days=int(time))
                         )
+                    query.order_by('-q_creation_time')
         else:
-            query = Questions.objects.all()
+            query = Questions.objects.all().order_by('-q_creation_time')
         
         serializer = getQuestions(query, many=True)
         return Response(serializer.data)
