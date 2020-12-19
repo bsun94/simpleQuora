@@ -7,7 +7,7 @@ function HeaderBar () {
     return (
         <div className="headerBar">
             <img id="logo" src={logo} alt="Kworah - Get Your Answers Here!" />
-            {/* <img id="slogan" src={slogan} alt="Kworah - Be Curious!" /> */}
+            <img id="slogan" src={slogan} alt="Kworah - Be Curious!" />
         </div>
     )
 }
