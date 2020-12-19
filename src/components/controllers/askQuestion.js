@@ -17,7 +17,8 @@ function AskScreen () {
     }
 
     async function postQ () {
-        await postQuestions({"q_text": questionPost, "q_author": "bsun"})
+        await postQuestions({"text": questionPost, "author": "ppatel"})
+        getQ()
     }
 
     const mode = {

@@ -3,12 +3,12 @@ import React, { useState } from 'react'
 import { getQuestions, patchQuestions } from '../model/questions.js'
 
 export function Voters (props) {
-    const [active, setActive] = useState(true)
+    const [active, setActive] = useState(true)  // replace with tracking table in db
 
     async function Upvote (e) {
         if (active) {
-            let currentVotes = await getQuestions({'q_id': props.id})
-            await patchQuestions({'q_id': props.id, 'q_votes': currentVotes[0].q_votes + 1})
+            let currentVotes = await getQuestions({'id': props.id})
+            await patchQuestions({'id': props.id, 'votes': currentVotes[0].votes + 1})
             props.getQ()
             setActive(false)
         }
@@ -16,8 +16,8 @@ export function Voters (props) {
 
     async function Downvote (e) {
         if (active) {
-            let currentVotes = await getQuestions({'q_id': props.id})
-            await patchQuestions({'q_id': props.id, 'q_votes': currentVotes[0].q_votes - 1})
+            let currentVotes = await getQuestions({'id': props.id})
+            await patchQuestions({'id': props.id, 'votes': currentVotes[0].votes - 1})
             props.getQ()
             setActive(false)
         }
