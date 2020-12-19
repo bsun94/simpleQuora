@@ -1,8 +1,10 @@
 import methods from "./enums.js"
 
 export async function getQuestions(data) {
+    var url
+    
     if (data) {
-        var url = new URL('http://127.0.0.1:8000/quoraBase/questions')
+        url = new URL('http://127.0.0.1:8000/quoraBase/questions')
         
         var query = '?'
 
@@ -13,7 +15,7 @@ export async function getQuestions(data) {
 
         url.search = query
     } else {
-        var url = new URL('http://127.0.0.1:8000/quoraBase/questions/')
+        url = new URL('http://127.0.0.1:8000/quoraBase/questions/')
     }
 
     let response = await fetch(url, {method: methods[0]})

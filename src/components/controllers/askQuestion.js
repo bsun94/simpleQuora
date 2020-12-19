@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 
-import logo from "../../KworahLogo.jpg"
-
 import { getQuestions, postQuestions } from "../model/questions.js"
 
 import { QuestionDisplay } from "../views/question.js"
@@ -23,15 +21,16 @@ function AskScreen () {
     }
 
     const mode = {
-        'search': <MainGetter setFunc={setQuestionGet} getFunc={getQ} />,
+        'search': <MainGetter setFunc={() => {return}} getFunc={getQ} />,
         'ask': <MainPoster setFunc={setQuestionPost} postFunc={postQ} />
     }
 
     return (
-        <div>
-            <img src={logo} alt="Kworah - Get Your Answers Here!" />
-            <button onClick={e => setPageMode('ask')}>Ask the Kworah Community!</button>
-            <button onClick={e => setPageMode('search')}>See what's been asked!</button>
+        <div className="contentWrapper">
+            <div className="pageTopSwitch">
+                <button className="mainButton" onClick={e => setPageMode('ask')}>Ask the Kworah Community!</button>
+                <button className="mainButton" onClick={e => setPageMode('search')}>See what's been asked!</button>
+            </div>
             {mode[pageMode]}
             <QuestionDisplay questions={questionGet} getQ={getQ} />
         </div>

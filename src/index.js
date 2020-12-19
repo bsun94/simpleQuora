@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
-import AskQuestion from './components/controllers/askQuestion.js'
+import Navigator from './components/navigation.js'
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AskQuestion />
+    <Navigator />
   </React.StrictMode>,
   document.getElementById('root')
 );

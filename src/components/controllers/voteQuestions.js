@@ -24,9 +24,10 @@ export function Voters (props) {
     }
 
     return (
-        <div>
-            <div className="Upvote" onClick={Upvote} >Upvote</div>
-            <div className="Downvote" onClick={Downvote} >Downvote</div>
+        <div className="voteButtons">
+            <div className="Upvote" onClick={Upvote} ></div>
+            <div className="votes">{props.votes}</div>
+            <div className="Downvote" onClick={Downvote} ></div>
         </div>
     )
 }
