@@ -3,11 +3,11 @@ from rest_framework.response import Response
 
 from datetime import date, timedelta
 
-from ..models import Questions
-from ..serializers import getQuestions
+from ..models import Answers
+from ..serializers import getAnswers
 
 @api_view(['GET', 'POST', 'DELETE', 'PATCH'])
-def questions(request):
+def answers(request):
 
     if request.method == 'GET':
         return get(request)
@@ -22,25 +22,27 @@ def questions(request):
         return patch(request)
 
 def get(request):
-    if request.GET:
-        id = request.GET.get("id")
-        if id:
-            query = Questions.objects.filter(pk=id)
-        else:
-            time = request.GET.get("creation_time")
-            if time:
-                query = Questions.objects.filter(
-                    q_creation_time__gte=date.today()-timedelta(days=int(time))
-                    )
-                query.order_by('-creation_time')
-    else:
-        query = Questions.objects.all().order_by('-creation_time')
-    
-    serializer = getQuestions(query, many=True)
-    return Response(serializer.data)
+    id = request.GET.get("id")
+    question_id = request.GET.get("question_id")
+
+    if id:
+        try:
+            answerQuery = Answers.objects.filter(pk=id)
+        except:
+            return Response({"Error": "Missing or Invalid Answer ID"}, status=400)
+    elif question_id:
+        try:
+            answerQuery = Answers.objects.filter(question_id=question_id)
+        except:
+            return Response({"Error": "Missing or Invalid Question ID"}, status=400)
+
+        answerQuery.order_by('-votes')
+
+    answerSerializer = getAnswers(answerQuery, many=True)
+    return Response(answerSerializer.data)
 
 def post(request):
-    serializer = getQuestions(data=request.data)
+    serializer = getAnswers(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=201)
@@ -50,7 +52,7 @@ def delete(request):
     id = request.data.get("id")
     if id:
         try:
-            query = Questions.objects.get(pk=id)
+            query = Answers.objects.get(pk=id)
             query.delete()
             return Response({"Success": "Record deleted"}, status=202)
         except:
@@ -68,7 +70,7 @@ def patch(request):
     id = request.data.get("id")
     if id:
         try:
-            Questions.objects.filter(pk=id).update(votes=vote)
+            Answers.objects.filter(pk=id).update(votes=vote)
             return Response({"Success": "Record updated"}, status=200)
         except:
             return Response({"Error": "Stated ID does not exist"}, status=400)

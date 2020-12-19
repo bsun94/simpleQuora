@@ -23,7 +23,7 @@ function AskScreen () {
 
     const mode = {
         'search': <MainGetter setFunc={() => {return}} getFunc={getQ} />,
-        'ask': <MainPoster setFunc={setQuestionPost} postFunc={postQ} />
+        'ask': <MainPoster setFunc={setQuestionPost} postFunc={postQ} placeholder="What's your question?" buttonText="Ask the Community!" />
     }
 
     return (

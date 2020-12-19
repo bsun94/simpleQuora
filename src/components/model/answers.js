@@ -1,11 +1,11 @@
 import methods from "./enums.js"
 import hosts from "./hosts.js"
 
-export async function getQuestions(data) {
+export async function getAnswers(data) {
     var url
     
     if (data) {
-        url = new URL(hosts['active'] + '/quoraBase/questions')
+        url = new URL(hosts['active'] + '/quoraBase/answers')
         
         var query = '?'
 
@@ -16,7 +16,7 @@ export async function getQuestions(data) {
 
         url.search = query
     } else {
-        url = new URL(hosts['active'] + '/quoraBase/questions/')
+        url = new URL(hosts['active'] + '/quoraBase/answers/')
     }
 
     let response = await fetch(url, {method: methods[0]})
@@ -25,20 +25,20 @@ export async function getQuestions(data) {
 }
 
 
-export async function postQuestions(data) {
+export async function postAnswers(data) {
     return await APIFactory(methods[1], data)
 }
 
-export async function patchQuestions(data) {
+export async function patchAnswers(data) {
     return await APIFactory(methods[2], data)
 }
 
-export async function deleteQuestions(data) {
+export async function deleteAnswers(data) {
     return await APIFactory(methods[3], data)
 }
 
 async function APIFactory (method, data) {
-    let response = await fetch(hosts['active'] + '/quoraBase/questions/', {
+    let response = await fetch(hosts['active'] + '/quoraBase/answers/', {
         method: method,
         body: JSON.stringify(data),
         headers: {"Content-Type": "application/json"}
