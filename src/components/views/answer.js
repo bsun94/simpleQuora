@@ -1,15 +1,22 @@
-import React from 'react'
+import React, { useContext } from 'react'
+
+import ModeContext from "../pageContext.js"
+
 import { Voters } from '../controllers/voteAnswers.js'
 
 export function AnswerDisplay (props) {
+    const { mode, setMode } = useContext(ModeContext)
+
     let htmlOutput = []
 
     props.answers.forEach(entry => {
         let date = new Date(entry.creation_time)
         let options = {dateStyle: 'long', timeStyle: 'short'}
+
+        const viewAnswer = () => setMode(['comment', entry.id])
         
         htmlOutput.push(
-            <div className="headline answer-headline" id={entry.id}>
+            <div className="headline answer-headline" id={entry.id} onClick={viewAnswer} >
                 <Voters id={entry.id} q_id={entry.question} votes={entry.votes} getA={props.getA} />
                 
                 <div className="textBody">

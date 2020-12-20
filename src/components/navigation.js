@@ -5,6 +5,7 @@ import ModeContext from "./pageContext.js"
 import HeaderBar from "./views/headerBar.js"
 import AskScreen from "./controllers/askQuestion.js"
 import SeeAnswers from './controllers/seeAnswers.js'
+import SeeComments from "./controllers/seeComments.js"
 
 function Navigator () {
     const [mode, setMode] = useState(['question', null])
@@ -13,7 +14,7 @@ function Navigator () {
     const views = {
         'question': <AskScreen />,
         'answer': <SeeAnswers question_id={mode[1]} />,
-        'comment': <div></div>
+        'comment': <SeeComments answer_id={mode[1]} />
     }
 
     return (
