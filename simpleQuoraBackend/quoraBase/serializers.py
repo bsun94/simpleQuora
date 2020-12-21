@@ -14,4 +14,4 @@ class getAnswers(serializers.ModelSerializer):
 class getComments(serializers.ModelSerializer):
     class Meta:
         model = Comments
-        fields = ['id', 'text', 'author', 'creation_time', 'answer', 'replyto']
+        fields = '__all__'

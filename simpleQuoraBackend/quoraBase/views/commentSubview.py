@@ -1,7 +1,9 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from datetime import date, timedelta
+from django.core import serializers
+import json
+from django.db import connection
 
 from ..models import Comments
 from ..serializers import getComments
@@ -22,24 +24,28 @@ def comments(request):
         return patch(request)
 
 def get(request):
-    id = request.GET.get("id")
     answer_id = request.GET.get("answer_id")
 
-    if id:
-        try:
-            query = Comments.objects.filter(pk=id)
-        except:
-            return Response({"Error": "Missing or Invalid Comment ID"}, status=400)
-    elif answer_id:
-        try:
-            query = Comments.objects.filter(answer_id=answer_id)
-        except:
-            return Response({"Error": "Missing or Invalid Answer ID"}, status=400)
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                'SELECT c1.id as id \
+                , c1.text as text \
+                , c1.author as author \
+                , c1.creation_time as creation_time \
+                , c1.answer_id as answer_id \
+                , c1.replyto_id as replyto \
+                , c2.text as originalText \
+                , c2.author as originalAuthor \
+                FROM comments as c1 LEFT JOIN comments as c2 ON c1.replyto_id = c2.id \
+                WHERE c1.answer_id = %s \
+                ORDER BY c1.creation_time ASC;',
+                [answer_id])
+            query = dictfetchall(cursor)  # see at the bottom
+    except:
+        return Response({"Error": "Missing or Invalid Answer ID"}, status=400)
 
-        query.order_by('creation_time')
-
-    serializer = getComments(query, many=True)
-    return Response(serializer.data)
+    return Response(query)
 
 def post(request):
     serializer = getComments(data=request.data)
@@ -74,3 +80,11 @@ def patch(request):
             return Response({"Success": "Record updated"}, status=200)
         except:
             return Response({"Error": "Stated ID does not exist"}, status=400)
+
+def dictfetchall(cursor):
+    # To convert cursor results - from raw SQL - to dict for serialization
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]

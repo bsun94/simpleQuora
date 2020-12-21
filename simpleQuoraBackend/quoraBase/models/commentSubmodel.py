@@ -12,3 +12,6 @@ class Comments(models.Model):
 
     def __str__(self):
         return self.author + ' commented: ' + self.text
+    
+    class Meta:
+        db_table = 'comments'
