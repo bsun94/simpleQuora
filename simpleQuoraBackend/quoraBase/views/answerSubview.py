@@ -1,8 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from datetime import date, timedelta
-
 from ..models import Answers
 from ..serializers import getAnswers
 

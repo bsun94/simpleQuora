@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Questions, Answers, Comments
+from .models import Questions, Answers, Comments, Users
 
 class getQuestions(serializers.ModelSerializer):
     class Meta:
@@ -14,4 +14,9 @@ class getAnswers(serializers.ModelSerializer):
 class getComments(serializers.ModelSerializer):
     class Meta:
         model = Comments
+        fields = '__all__'
+
+class getUsers(serializers.ModelSerializer):
+    class Meta:
+        model = Users
         fields = '__all__'

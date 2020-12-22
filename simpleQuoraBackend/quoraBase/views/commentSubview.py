@@ -1,8 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from django.core import serializers
-import json
 from django.db import connection
 
 from ..models import Comments

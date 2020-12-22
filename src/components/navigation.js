@@ -11,6 +11,7 @@ function Navigator () {
     const [mode, setMode] = useState(['question', null])
     const value = { mode, setMode }
 
+    // React router - routing from child
     const views = {
         'question': <AskScreen />,
         'answer': <SeeAnswers question_id={mode[1]} />,

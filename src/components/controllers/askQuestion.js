@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { getQuestions, postQuestions } from "../model/questions.js"
 
@@ -25,6 +25,8 @@ function AskScreen () {
         'search': <MainGetter setFunc={() => {return}} getFunc={getQ} />,
         'ask': <MainPoster setFunc={setQuestionPost} postFunc={postQ} placeholder="What's your question?" buttonText="Ask the Community!" />
     }
+
+    useEffect(() => getQ(), [])
 
     return (
         <div className="contentWrapper">
