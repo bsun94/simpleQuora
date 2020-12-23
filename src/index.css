@@ -5,11 +5,36 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url("./components/bgImages/foroRomano.jpg");
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
 }
+
+/* Backgrounds */
+
+.background {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100vh;
+  width: 100vw;
+  z-index: -1;
+  overflow: auto;
+}
+
+.bgImage {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.bgImage.active {
+  opacity: 0.6;
+}
+
+
 
 /* Before login */
 

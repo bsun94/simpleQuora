@@ -2,11 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Login from './components/controllers/login.js'
+import BgImgs from './components/bgImages/background.js'
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Login />
+    <div>
+      <BgImgs />
+      <Login />
+    </div>
   </React.StrictMode>,
   document.getElementById('root')
 );
