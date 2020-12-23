@@ -8,6 +8,33 @@ body {
   background-color: lightcyan;
 }
 
+/* Before login */
+
+.loginScreen {
+  margin-top: 20vh;
+  text-align: center;
+}
+
+.loginTitle {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 40px;
+  font-weight: bolder;
+  color: blue;
+  text-shadow: 2px 2px 5px gray;
+  margin-bottom: 40px;
+}
+
+.loginInput {
+  width: 30vw;
+  height: 20px;
+  padding-left: 5px;
+  margin-bottom: 20px;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+/* Main display elements */
+
 .headerBar {
   position: sticky;
   top: 0px;
@@ -22,6 +49,19 @@ body {
 #slogan {
   height: 50px;
   margin-left: 20px;
+}
+
+.Logout {
+  position: absolute;
+  right: 15px;
+  margin-top: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: gray;
+  cursor: pointer;
+}
+
+.Logout:hover {
+  text-decoration: underline 1px gray;
 }
 
 .contentWrapper {
@@ -87,7 +127,7 @@ body {
 .headline {
   display: flex;
   width: 50vw;
-  height: 80px;
+  min-height: 80px;
   margin: 20px;
   padding: 5px;
   border-radius: 10px;
@@ -96,7 +136,6 @@ body {
 
 .headline:hover {
   box-shadow: gray 2px 2px 5px 1px;
-  cursor: pointer;
 }
 
 .question-headline {
@@ -151,10 +190,15 @@ body {
 /* 4. Main text body (question, answer, comment) */
 
 .textBody {
+  width: calc(50vw - 40px);
   margin-left: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.textBody:hover {
+  cursor: pointer;
 }
 
 .author {
@@ -164,6 +208,8 @@ body {
 }
 
 .mainText {
+  margin-top: 5px;
+  margin-bottom: 5px;
   font-size: 18px;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
@@ -180,4 +226,62 @@ body {
 .date {
   font-size: 13px;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.repliesExpand {
+  height: 20px;
+  margin-right: 30px;
+  background-color: azure;
+  border: darkblue solid 1px;
+  border-radius: 5px;
+  color: darkblue;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+}
+
+.repliesExpand:hover {
+  cursor: pointer;
+  background-color: darkblue;
+  color: azure;
+}
+
+.repliesInput {
+  width: 300px;
+  margin-right: 5px;
+  border: black 2px solid;
+  border-radius: 5px;
+}
+
+.repliesPoster {
+  background-color: mistyrose;
+  color: darkred;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  border: darkred 2px solid;
+  border-radius: 5px;
+}
+
+.repliesPoster:hover {
+  cursor: pointer;
+  background-color: darkred;
+  color: mistyrose;
+}
+
+.deletor {
+  width: 60px;
+  background-color: lightgray;
+  color: black;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  border: black 2px solid;
+  border-radius: 5px;
+}
+
+.deletor:hover {
+  cursor: pointer;
+  background-color: black;
+  color: lightgray;
 }

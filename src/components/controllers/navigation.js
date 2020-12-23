@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
-import ModeContext from "./pageContext.js"
+import ModeContext from "../pageContext.js"
 
-import HeaderBar from "./views/headerBar.js"
-import AskScreen from "./controllers/askQuestion.js"
-import SeeAnswers from './controllers/seeAnswers.js'
-import SeeComments from "./controllers/seeComments.js"
+import HeaderBar from "../views/headerBar.js"
+import AskScreen from "./askQuestion.js"
+import SeeAnswers from './seeAnswers.js'
+import SeeComments from "./seeComments.js"
 
 function Navigator () {
     const [mode, setMode] = useState(['question', null])

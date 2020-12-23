@@ -22,9 +22,8 @@ def users(request):
 def get(request):
     username = request.GET.get("username")
 
-    try:
-        query = Users.objects.filter(username=username)
-    except:
+    query = Users.objects.filter(username=username)
+    if not query.exists():
         return Response({"Error": "Invalid username input"}, status=400)
 
     serializer = getUsers(query, many=True)
