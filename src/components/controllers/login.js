@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import { getUsers, postUsers } from "../model/user.js"
 import { sha256 } from "../model/hash.js"
@@ -20,14 +20,6 @@ function Login () {
         setUserID, setUsername, setLoggedIn 
     }
 
-    useEffect(() => {
-        setUserID(Number())
-        setUsername('')
-        setPassword('')
-        setLoginStatus('')
-        setLoggedIn(false)
-    }, [])
-
     async function register() {
         let pw = await sha256(password)
         let response = await postUsers({"username": username, "password": pw})
@@ -38,7 +30,8 @@ function Login () {
                 "'" + Object.keys(body) + "': " + Object.values(body)[0]
                 )
         } else {
-            setUserID(body[0]["id"])
+            setUserID(body["id"])
+            setLoginStatus('')
             setLoggedIn(true)
         }
     }
@@ -55,6 +48,7 @@ function Login () {
                 setLoginStatus('Incorrect password!')
             } else {
                 setUserID(body[0]["id"])
+                setLoginStatus('')
                 setLoggedIn(true)
             }
         }

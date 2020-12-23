@@ -5,7 +5,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: lightcyan;
+  background-image: url("./components/bgImages/foroRomano.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
 }
 
 /* Before login */
@@ -16,21 +19,29 @@ body {
 }
 
 .loginTitle {
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 40px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 50px;
   font-weight: bolder;
-  color: blue;
-  text-shadow: 2px 2px 5px gray;
+  color: white;
+  text-shadow: 2px 2px 5px black;
   margin-bottom: 40px;
 }
 
 .loginInput {
   width: 30vw;
-  height: 20px;
+  height: 30px;
   padding-left: 5px;
   margin-bottom: 20px;
   border: 2px solid black;
   border-radius: 5px;
+}
+
+.loginStatus {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 5px black;
 }
 
 /* Main display elements */
@@ -87,6 +98,7 @@ body {
   font-weight: bold;
   color: white;
   background-color: mediumblue;
+  box-shadow: black 2px 2px 5px 1px;
 }
 
 .mainButton:hover {
@@ -110,15 +122,15 @@ body {
   width: 160px;
   border: none;
   border-radius: 5px;
-  background-color: crimson;
+  background-color: dodgerblue;
   color: white;
   font-weight: bold;
 }
 
 .subButton:hover {
-  border: 2px solid crimson;
+  border: 2px solid dodgerblue;
   background-color: white;
-  color: crimson;
+  color: dodgerblue;
   cursor: pointer;
 }
 
@@ -140,6 +152,14 @@ body {
 
 .question-headline {
   border: 5px solid black;
+}
+
+.answer-headline {
+  border: 2px solid black;
+}
+
+.comment-headline {
+  border: 1px solid black;
 }
 
 /* 3. Vote buttons */
