@@ -25,12 +25,12 @@ function Login () {
         let response = await postUsers({"username": username, "password": pw})
         let body = await response.json()
         
-        if (response.status === 400) {
+        if (response.status >= 400) {
             setLoginStatus(
                 "'" + Object.keys(body) + "': " + Object.values(body)[0]
                 )
         } else {
-            setUserID(body["id"])
+            setUserID(body[0]["id"])
             setLoginStatus('')
             setLoggedIn(true)
         }
@@ -41,11 +41,13 @@ function Login () {
         let response = await getUsers({"username": username})
         let body = await response.json()
         
-        if (response.status === 400) {
+        if (response.status >= 400) {
             setLoginStatus(body["Error"])
         } else {
             if (body[0]["password"] !== pw) {
                 setLoginStatus('Incorrect password!')
+                console.log(pw)
+                console.log(body)
             } else {
                 setUserID(body[0]["id"])
                 setLoginStatus('')

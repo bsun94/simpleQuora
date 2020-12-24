@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Questions, Answers, Comments, Users
+from .models import Questions, Answers, Comments, Users, HasVoted
 
 class getQuestions(serializers.ModelSerializer):
     class Meta:
@@ -19,4 +19,9 @@ class getComments(serializers.ModelSerializer):
 class getUsers(serializers.ModelSerializer):
     class Meta:
         model = Users
+        fields = '__all__'
+
+class getHasVoted(serializers.ModelSerializer):
+    class Meta:
+        model = HasVoted
         fields = '__all__'
