@@ -6,6 +6,10 @@ from datetime import date, timedelta
 from ..models import Questions
 from ..serializers import getQuestions
 
+from .awsHelper import awsHelper
+
+aws = awsHelper()
+
 @api_view(['GET', 'POST', 'DELETE', 'PATCH'])
 def questions(request):
 
@@ -27,12 +31,27 @@ def get(request):
         if id:
             query = Questions.objects.filter(pk=id)
         else:
+            search = request.GET.get("search")
             time = request.GET.get("creation_time")
-            if time:
-                query = Questions.objects.filter(
-                    q_creation_time__gte=date.today()-timedelta(days=int(time))
+
+            if search:
+                resp = aws.getter(search)
+                if resp.get("hits"):
+                    indices = [x["_id"] for x in resp["hits"]["hits"]]
+                else:
+                    indices = []
+
+                query = Questions.objects.filter(id__in=indices).order_by('-creation_time')
+
+                if time:
+                    query = query.filter(
+                        q_creation_time__gte=date.today()-timedelta(days=int(time))
                     )
-                query.order_by('-creation_time')
+            elif time:
+                query = Questions.objects.filter(
+                        q_creation_time__gte=date.today()-timedelta(days=int(time))
+                    ).order_by('-creation_time')
+                
     else:
         query = Questions.objects.all().order_by('-creation_time')
     
@@ -43,7 +62,13 @@ def post(request):
     serializer = getQuestions(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=201)
+        resp = aws.poster(serializer.data)
+
+        if resp["_shards"]["successful"] == 1:
+            return Response(serializer.data, status=201)
+        else:
+            return Response({"Error": "Upload to AWS Elasticsearch has failed"}, status=500)
+    
     return Response(serializer.errors, status=400)
 
 def delete(request):

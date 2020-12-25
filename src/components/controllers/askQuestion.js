@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+
+import UserContext from "../userContext.js"
 
 import { getQuestions, postQuestions } from "../model/questions.js"
 
@@ -10,23 +12,35 @@ function AskScreen () {
     const [questionPost, setQuestionPost] = useState('')
     const [questionGet, setQuestionGet] = useState([])
 
+    const [search, setSearch] = useState('')
+
     const [pageMode, setPageMode] = useState('search')
 
+    const { 
+        userID, username, loggedIn, 
+        setUserID, setUsername, setLoggedIn 
+    } = useContext(UserContext)
+
     async function getQ () {
-        setQuestionGet(await getQuestions({}))
+        let params = {}
+        if (search !== '') {
+            params["search"] = search
+        }
+        
+        setQuestionGet(await getQuestions(params))
     }
 
     async function postQ () {
-        await postQuestions({"text": questionPost, "author": "ppatel"})
+        await postQuestions({"text": questionPost, "author": username})
         getQ()
     }
 
-    const mode = {
-        'search': <MainGetter setFunc={() => {return}} getFunc={getQ} />,
-        'ask': <MainPoster setFunc={setQuestionPost} postFunc={postQ} placeholder="What's your question?" buttonText="Ask the Community!" />
-    }
-
     useEffect(() => getQ(), [])
+
+    const mode = {
+        'search': <MainGetter setFunc={setSearch} getFunc={getQ} />,
+        'ask': <MainPoster setFunc={setQuestionPost} postFunc={postQ} placeholder="Got a question?" buttonText="Ask the Community!" />
+    }
 
     return (
         <div className="contentWrapper">
