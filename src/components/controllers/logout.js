@@ -3,12 +3,9 @@ import React, { useContext } from 'react'
 import UserContext from "../userContext.js"
 
 function Logout () {
-    const { 
-        userID, username, loggedIn, 
-        setUserID, setUsername, setLoggedIn 
-    } = useContext(UserContext)
+    const loginInfo = useContext(UserContext)
 
-    const logout = (e) => setLoggedIn(false)
+    const logout = (e) => loginInfo.setLoggedIn(false)
 
     return (
         <div className="Logout" onClick={logout} >Logout</div>

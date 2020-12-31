@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
 
-import ModeContext from "../pageContext.js"
+import UserContext from "../userContext.js"
 
 import { getQuestions } from "../model/questions.js"
 import { getAnswers, postAnswers } from "../model/answers.js"
@@ -14,21 +15,25 @@ function SeeAnswers (props) {
     const [answerGet, setAnswerGet] = useState([])
     const [answerPost, setAnswerPost] = useState('')
 
-    const { mode, setMode } = useContext(ModeContext)
-
-    const backToQuestions = () => setMode(['question', null])
+    const loginInfo = useContext(UserContext)
 
     async function getQ () {
-        setQuestionGet(await getQuestions({'id': props.question_id}))
+        setQuestionGet(await getQuestions({'id': props.match.params.id}))
     }
 
     async function getA () {
-        setAnswerGet(await getAnswers({'question_id': props.question_id}))
+        setAnswerGet(await getAnswers({'question_id': props.match.params.id}))
     }
 
     async function postA () {
-        await postAnswers({"text": answerPost, "author": "rjerling", "question": props.question_id})
-        getA()
+        let response = await postAnswers({"text": answerPost, "author": loginInfo.username, "question": props.match.params.id})
+        setAnswerGet([response, ...answerGet])
+    }
+
+    function refreshAfterDelete (index) {
+        let newArr = [...answerGet]
+        newArr.splice(index, 1)
+        setAnswerGet(newArr)
     }
 
     useEffect(() => {
@@ -39,11 +44,13 @@ function SeeAnswers (props) {
     return (
         <div>
             <div className="pageTopSwitch">
-                <button className="mainButton" onClick={backToQuestions}>Back to Questions Page</button>
+                <Link to="/" >
+                    <button className="mainButton">Back to Questions Page</button>
+                </Link>
             </div>
             <MainPoster setFunc={setAnswerPost} postFunc={postA} placeholder="Help the asker out!" buttonText="Answer!" />
             <QuestionDisplay questions={questionGet} getQ={getQ} />
-            <AnswerDisplay answers={answerGet} getA={getA} />
+            <AnswerDisplay answers={answerGet} getA={getA} delRefresh={refreshAfterDelete} />
         </div>
     )
 }

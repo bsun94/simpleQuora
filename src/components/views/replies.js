@@ -8,15 +8,12 @@ function Replies (props) {
     const [text, setText] = useState('')
     const [activated, setActivated] = useState("off")
 
-    const { 
-        userID, username, loggedIn, 
-        setUserID, setUsername, setLoggedIn 
-    } = useContext(UserContext)
+    const loginInfo = useContext(UserContext)
 
     async function postC () {
         await postComments({
             "text": text,
-            "author": username,
+            "author": loginInfo.username,
             "answer": props.answer,
             "replyto": props.replyto
         })

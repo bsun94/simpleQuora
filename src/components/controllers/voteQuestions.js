@@ -8,13 +8,10 @@ import { getHasVoted, postHasVoted } from '../model/hasVoted.js'
 export function Voters (props) {
     const [canVote, setCanVote] = useState()
 
-    const { 
-        userID, username, loggedIn, 
-        setUserID, setUsername, setLoggedIn 
-    } = useContext(UserContext)
+    const loginInfo = useContext(UserContext)
 
     async function updateState () {
-        let response = await getHasVoted({"user_id": userID, "question": props.id})
+        let response = await getHasVoted({"user_id": loginInfo.userID, "question": props.id})
         let body = await response.json()
 
         if (response.status >= 400) {
@@ -30,7 +27,7 @@ export function Voters (props) {
         if (canVote) {
             let currentVotes = await getQuestions({'id': props.id})
             await patchQuestions({'id': props.id, 'votes': currentVotes[0].votes + 1})
-            await postHasVoted({"user": userID, "username": username, "question": props.id, "vote_type": "up"})
+            await postHasVoted({"user": loginInfo.userID, "username": loginInfo.username, "question": props.id, "vote_type": "up"})
             props.getQ()
             updateState()
         }
@@ -40,7 +37,7 @@ export function Voters (props) {
         if (canVote) {
             let currentVotes = await getQuestions({'id': props.id})
             await patchQuestions({'id': props.id, 'votes': currentVotes[0].votes - 1})
-            await postHasVoted({"user": userID, "username": username, "question": props.id, "vote_type": "down"})
+            await postHasVoted({"user": loginInfo.userID, "username": loginInfo.username, "question": props.id, "vote_type": "down"})
             props.getQ()
             updateState()
         }

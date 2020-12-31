@@ -8,7 +8,16 @@ from ..serializers import getQuestions
 
 from .awsHelper import awsHelper
 
-aws = awsHelper()
+# Replace with the info of your own AWS Elasticsearch instance
+HOST = "https://search-simplequora-6h3qxmhww5y2w6coxegz7q4tki.us-east-2.es.amazonaws.com/"
+DOMAIN = "simplequora/"
+INDICES = ""
+
+# Where my personals creds are stored and gitignored; store yours in the ./simpleQuora/empty_AWS_ES_creds.json 
+# file provided and link to there (refer to AWS_ES_setup in ../simpleQuora)
+CREDS_FILE = './quoraBase/views/credentials.json'
+
+aws = awsHelper(HOST, DOMAIN, INDICES, CREDS_FILE)
 
 @api_view(['GET', 'POST', 'DELETE', 'PATCH'])
 def questions(request):
@@ -35,12 +44,7 @@ def get(request):
             time = request.GET.get("creation_time")
 
             if search:
-                resp = aws.getter(search)
-                if resp.get("hits"):
-                    indices = [x["_id"] for x in resp["hits"]["hits"]]
-                else:
-                    indices = []
-
+                indices = aws.getter(search)
                 query = Questions.objects.filter(id__in=indices).order_by('-creation_time')
 
                 if time:
@@ -64,10 +68,10 @@ def post(request):
         serializer.save()
         resp = aws.poster(serializer.data)
 
-        if resp["_shards"]["successful"] == 1:
-            return Response(serializer.data, status=201)
-        else:
+        if resp["_shards"]["successful"] == 0:
             return Response({"Error": "Upload to AWS Elasticsearch has failed"}, status=500)
+
+        return Response(serializer.data, status=201)
     
     return Response(serializer.errors, status=400)
 

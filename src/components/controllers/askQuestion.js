@@ -16,10 +16,7 @@ function AskScreen () {
 
     const [pageMode, setPageMode] = useState('search')
 
-    const { 
-        userID, username, loggedIn, 
-        setUserID, setUsername, setLoggedIn 
-    } = useContext(UserContext)
+    const loginInfo = useContext(UserContext)
 
     async function getQ () {
         let params = {}
@@ -31,8 +28,14 @@ function AskScreen () {
     }
 
     async function postQ () {
-        await postQuestions({"text": questionPost, "author": username})
-        getQ()
+        let response = await postQuestions({"text": questionPost, "author": loginInfo.username})
+        setQuestionGet([response, ...questionGet])
+    }
+
+    function refreshAfterDelete (index) {
+        let newArr = [...questionGet]
+        newArr.splice(index, 1)
+        setQuestionGet(newArr)
     }
 
     useEffect(() => getQ(), [])
@@ -49,7 +52,7 @@ function AskScreen () {
                 <button className="mainButton" onClick={e => setPageMode('search')}>See what's been asked!</button>
             </div>
             {mode[pageMode]}
-            <QuestionDisplay questions={questionGet} getQ={getQ} />
+            <QuestionDisplay questions={questionGet} getQ={getQ} delRefresh={refreshAfterDelete} />
         </div>
     )
 }

@@ -1,26 +1,21 @@
 import React, { useContext } from 'react'
 
 import UserContext from "../userContext.js"
+import db_tables from "../controllers/db_enums.js"
 
 import Replies from "./replies.js"
 import DeleteButton from "../controllers/delete.js"
-import { deleteComments } from "../model/comments.js"
 
 export function CommentDisplay (props) {
-    const { 
-        userID, username, loggedIn, 
-        setUserID, setUsername, setLoggedIn 
-    } = useContext(UserContext)
+    const loginInfo = useContext(UserContext)
     
     let htmlOutput = []
 
-    props.comments.forEach(entry => {
+    props.comments.forEach((entry, i) => {
         let date = new Date(entry.creation_time)
         let options = {dateStyle: 'long', timeStyle: 'short'}
 
-        async function delC () {
-            await deleteComments({"id": entry.id})
-        }
+        let delRefresh = () => props.delRefresh(i)
         
         htmlOutput.push(
             <div className="headline comment-headline" id={entry.id}>                
@@ -40,7 +35,7 @@ export function CommentDisplay (props) {
                     <div className="date">on {date.toLocaleString('en-US', options)}</div>
                     <Replies answer={entry.answer_id} replyto={entry.id} originalAuthor={entry.author} />
                 </div>
-                {entry.author === username ? <DeleteButton delFunc={delC} /> : null}
+                {entry.author === loginInfo.username ? <DeleteButton db={db_tables["C"]} entry_id={entry.id} delRefresh={delRefresh} /> : null}
 
             </div>
         )

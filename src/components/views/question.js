@@ -1,41 +1,32 @@
 import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
 
-import ModeContext from "../pageContext.js"
 import UserContext from "../userContext.js"
+import db_tables from "../controllers/db_enums.js"
 
 import { Voters } from '../controllers/voteQuestions.js'
 import DeleteButton from "../controllers/delete.js"
-import { deleteQuestions } from "../model/questions.js"
 
 export function QuestionDisplay (props) {
-    const { mode, setMode } = useContext(ModeContext)
-    const { 
-        userID, username, loggedIn, 
-        setUserID, setUsername, setLoggedIn 
-    } = useContext(UserContext)
+    const loginInfo = useContext(UserContext)
     
     let htmlOutput = []
 
-    props.questions.forEach(entry => {
+    props.questions.forEach((entry, i) => {
         let date = new Date(entry.creation_time)
         let options = {dateStyle: 'long', timeStyle: 'short'}
 
-        let viewQuestion = () => setMode(['answer', entry.id])
-
-        async function delQ () {
-            await deleteQuestions({"id": entry.id})
-        }
+        let delRefresh = () => props.delRefresh(i)
         
         htmlOutput.push(
             <div className="headline question-headline" id={entry.id} >
                 <Voters id={entry.id} votes={entry.votes} getQ={props.getQ} />
-                
-                <div className="textBody" onClick={viewQuestion} >
+                <Link className="textBody" to={`/answersToQuestion/${entry.id}`} >
                     <div className="author">{entry.author} asked:</div>
                     <div className="mainText">{entry.text}</div>
                     <div className="date">on {date.toLocaleString('en-US', options)}</div>
-                </div>
-                {entry.author === username ? <DeleteButton delFunc={delQ} /> : null}
+                </Link>
+                {entry.author === loginInfo.username ? <DeleteButton db={db_tables["Q"]} entry_id={entry.id} delRefresh={delRefresh} /> : null}
             
             </div>
         )

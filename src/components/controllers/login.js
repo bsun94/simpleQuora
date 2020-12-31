@@ -46,8 +46,6 @@ function Login () {
         } else {
             if (body[0]["password"] !== pw) {
                 setLoginStatus('Incorrect password!')
-                console.log(pw)
-                console.log(body)
             } else {
                 setUserID(body[0]["id"])
                 setLoginStatus('')

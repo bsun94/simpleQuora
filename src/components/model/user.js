@@ -26,18 +26,18 @@ export async function getUsers(data) {
 
 
 export async function postUsers(data) {
-    return await APIFactory(methods[1], data)
+    return await makeCall(methods[1], data)
 }
 
 export async function patchUsers(data) {
-    return await APIFactory(methods[2], data)
+    return await makeCall(methods[2], data)
 }
 
 export async function deleteUsers(data) {
-    return await APIFactory(methods[3], data)
+    return await makeCall(methods[3], data)
 }
 
-async function APIFactory (method, data) {
+async function makeCall (method, data) {
     let response = await fetch(hosts['active'] + '/quoraBase/users/', {
         method: method,
         body: JSON.stringify(data),

@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-
-import ModeContext from "../pageContext.js"
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import HeaderBar from "../views/headerBar.js"
 import AskScreen from "./askQuestion.js"
@@ -8,22 +7,16 @@ import SeeAnswers from './seeAnswers.js'
 import SeeComments from "./seeComments.js"
 
 function Navigator () {
-    const [mode, setMode] = useState(['question', null])
-    const value = { mode, setMode }
-
-    // React router - routing from child
-    const views = {
-        'question': <AskScreen />,
-        'answer': <SeeAnswers question_id={mode[1]} />,
-        'comment': <SeeComments answer_id={mode[1]} />
-    }
-
     return (
         <div>
             <HeaderBar />
-            <ModeContext.Provider value={value}>
-                {views[mode[0]]}
-            </ModeContext.Provider>
+            <Router>
+                <Switch>
+                    <Route path="/" exact component={AskScreen} />
+                    <Route path="/answersToQuestion/:id" component={SeeAnswers} />
+                    <Route path="/commentsToAnswer/:id" component={SeeComments} />
+                </Switch>
+            </Router>
         </div>
     )
 }

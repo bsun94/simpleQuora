@@ -1,41 +1,32 @@
 import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
 
-import ModeContext from "../pageContext.js"
 import UserContext from "../userContext.js"
+import db_tables from "../controllers/db_enums.js"
 
 import { Voters } from '../controllers/voteAnswers.js'
 import DeleteButton from "../controllers/delete.js"
-import { deleteAnswers } from "../model/answers.js"
 
 export function AnswerDisplay (props) {
-    const { mode, setMode } = useContext(ModeContext)
-    const { 
-        userID, username, loggedIn, 
-        setUserID, setUsername, setLoggedIn 
-    } = useContext(UserContext)
+    const loginInfo = useContext(UserContext)
 
     let htmlOutput = []
 
-    props.answers.forEach(entry => {
+    props.answers.forEach((entry, i) => {
         let date = new Date(entry.creation_time)
         let options = {dateStyle: 'long', timeStyle: 'short'}
 
-        const viewAnswer = () => setMode(['comment', entry.id])
-
-        async function delA () {
-            await deleteAnswers({"id": entry.id})
-        }
+        let delRefresh = () => props.delRefresh(i)
         
         htmlOutput.push(
             <div className="headline answer-headline" id={entry.id} >
                 <Voters id={entry.id} q_id={entry.question} votes={entry.votes} getA={props.getA} />
-                
-                <div className="textBody" onClick={viewAnswer} >
+                <Link className="textBody" to={`/commentsToAnswer/${entry.id}`} >
                     <div className="author">{entry.author} answered:</div>
                     <div className="mainText">{entry.text}</div>
                     <div className="date">on {date.toLocaleString('en-US', options)}</div>
-                </div>
-                {entry.author === username ? <DeleteButton delFunc={delA} /> : null}
+                </Link>
+                {entry.author === loginInfo.username ? <DeleteButton db={db_tables["A"]} entry_id={entry.id} delRefresh={delRefresh} /> : null}
             
             </div>
         )

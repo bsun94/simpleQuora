@@ -26,19 +26,18 @@ export async function getComments(data) {
 
 
 export async function postComments(data) {
-    return await APIFactory(methods[1], data)
+    return await makeCall(methods[1], data)
 }
 
 export async function patchComments(data) {
-    return await APIFactory(methods[2], data)
+    return await makeCall(methods[2], data)
 }
 
 export async function deleteComments(data) {
-    return await APIFactory(methods[3], data)
+    return await makeCall(methods[3], data)
 }
 
-// rename to makeCall
-async function APIFactory (method, data) {
+async function makeCall (method, data) {
     let response = await fetch(hosts['active'] + '/quoraBase/comments/', {
         method: method,
         body: JSON.stringify(data),

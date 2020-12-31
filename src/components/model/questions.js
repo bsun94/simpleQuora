@@ -1,6 +1,8 @@
 import methods from "./enums.js"
 import hosts from "./hosts.js"
 
+import ErrorDisplay from "../views/errorDisplay.js"
+
 export async function getQuestions(data) {
     var url
     
@@ -26,18 +28,18 @@ export async function getQuestions(data) {
 
 
 export async function postQuestions(data) {
-    return await APIFactory(methods[1], data)
+    return await makeCall(methods[1], data)
 }
 
 export async function patchQuestions(data) {
-    return await APIFactory(methods[2], data)
+    return await makeCall(methods[2], data)
 }
 
 export async function deleteQuestions(data) {
-    return await APIFactory(methods[3], data)
+    return await makeCall(methods[3], data)
 }
 
-async function APIFactory (method, data) {
+async function makeCall (method, data) {
     let response = await fetch(hosts['active'] + '/quoraBase/questions/', {
         method: method,
         body: JSON.stringify(data),

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
 
-import ModeContext from "../pageContext.js"
+import UserContext from '../userContext.js'
 
 import { getAnswers } from "../model/answers.js"
 import { getComments, postComments } from "../model/comments.js"
@@ -13,40 +14,50 @@ function SeeComments (props) {
     const [answerGet, setAnswerGet] = useState([])
     const [commentGet, setCommentGet] = useState([])
     const [commentPost, setCommentPost] = useState('')
+    const [backToQuestion, setBackToQuestion] = useState()
 
-    const { mode, setMode } = useContext(ModeContext)
+    const loginInfo = useContext(UserContext)
 
     async function backToAnswers () {
-        let question_id = await getAnswers({'id': props.answer_id})
-        setMode(['answer', question_id[0].question])
+        let question_id = await getAnswers({'id': props.match.params.id})
+        setBackToQuestion(question_id[0].question)
     }
 
     async function getA () {
-        setAnswerGet(await getAnswers({'id': props.answer_id}))
+        setAnswerGet(await getAnswers({'id': props.match.params.id}))
     }
 
     async function getC () {
-        setCommentGet(await getComments({'answer_id': props.answer_id}))
+        setCommentGet(await getComments({'answer_id': props.match.params.id}))
     }
 
     async function postC () {
-        await postComments({"text": commentPost, "author": "bsun", "answer": props.answer_id})
-        getC()
+        let response = await postComments({"text": commentPost, "author": loginInfo.username, "answer": props.match.params.id})
+        setCommentGet([response, ...commentGet])
+    }
+
+    function refreshAfterDelete (index) {
+        let newArr = [...commentGet]
+        newArr.splice(index, 1)
+        setCommentGet(newArr)
     }
 
     useEffect(() => {
         getA()
         getC()
+        backToAnswers()
     }, [])  // empty array passed to prevent infinite firing
 
     return (
         <div>
             <div className="pageTopSwitch">
-                <button className="mainButton" onClick={backToAnswers}>Back to Answers Page</button>
+                <Link to={`/answersToQuestion/${backToQuestion}`} >
+                    <button className="mainButton">Back to Answers Page</button>
+                </Link>
             </div>
             <MainPoster setFunc={setCommentPost} postFunc={postC} placeholder="Comment..." buttonText="Post Comment" />
             <AnswerDisplay answers={answerGet} getA={getA} />
-            <CommentDisplay comments={commentGet} getC={getC} />
+            <CommentDisplay comments={commentGet} getC={getC} delRefresh={refreshAfterDelete} />
         </div>
     )
 }

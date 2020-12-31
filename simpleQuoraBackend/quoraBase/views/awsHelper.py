@@ -2,30 +2,42 @@ import requests
 import json
 
 class awsHelper:
-    # Replace with the info of your own AWS Elasticsearch instance
-    HOST = "https://search-simplequora-6h3qxmhww5y2w6coxegz7q4tki.us-east-2.es.amazonaws.com/"
-    DOMAIN = "simplequora/"
-    
-    # Where my personals creds are stored and gitignored; store yours in the ./simpleQuora/empty_AWS_ES_creds.json file provided and link to there (refer to AWS_ES_setup in ../simpleQuora)
-    CREDS_FILE = './quoraBase/views/credentials.json'
+    """
+    A helper class to handle AWS Elasticsearch posts and gets. Object initialization takes three arguments:
 
-    def __init__(self):
-        with open(self.CREDS_FILE) as f:
+        1) host - the https url to your AWS ES instance
+        2) domain - the name of your AWS ES instance
+        3) indices - the index (and any sub-indices) of your ES document
+        4) creds_file - where your AWS ES credentials are stored
+    """
+
+    def __init__(self, host, domain, indices, creds_file):
+        self.host = host
+        self.domain = domain
+        self.indices = indices
+
+        with open(creds_file) as f:
             creds = json.loads(f.read())
             self.username = creds["user"]
             self.password = creds["password"]
 
     def getter(self, query):
         url_query = '+'.join(query.strip().split())
-        url = self.HOST + self.DOMAIN + f"_search?q={url_query}&pretty=true&filter_path=_shards,hits.hits._id"
+        url = self.host + self.domain + self.indices + f"_search?q={url_query}&pretty=true&sort=_score:desc&filter_path=_shards,hits.hits._id"
 
         r = requests.get(url, auth=(self.username, self.password))
+        r_dict = r.json()
 
-        return r.json()
+        if len(r_dict["hits"]) > 0:
+            indices = [x["_id"] for x in r_dict["hits"]["hits"]]
+        else:
+            indices = []
+
+        return indices
     
     def poster(self, body):
         payload = {"text": body["text"], "author": body["author"]}
-        url = self.HOST + self.DOMAIN + f"_doc/{body['id']}"
+        url = self.host + self.domain + self.indices + f"_doc/{body['id']}"
 
         r = requests.put(url, auth=(self.username, self.password), json=payload, headers={'Content-Type': 'application/json'})
         return r.json()
