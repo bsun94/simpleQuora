@@ -345,3 +345,26 @@ body {
   background-color: black;
   color: lightgray;
 }
+
+/* 5. Error Handler Box */
+
+.errorMsg {
+  position: fixed;
+  top: 10vh;
+  left: 37.5vw;
+  right: 37.5vw;
+  z-index: 100;
+  min-height: 10vh;
+  width: 25vw;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: white;
+  border: 2px black solid;
+  box-shadow: black 3px 3px 5px 2px;
+}
+
+.errorList{
+  margin-bottom: 20px;
+}

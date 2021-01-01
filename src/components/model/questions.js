@@ -1,7 +1,5 @@
-import methods from "./enums.js"
-import hosts from "./hosts.js"
-
-import ErrorDisplay from "../views/errorDisplay.js"
+import methods from "../enums/enums.js"
+import hosts from "../enums/hosts.js"
 
 export async function getQuestions(data) {
     var url
@@ -23,7 +21,7 @@ export async function getQuestions(data) {
 
     let response = await fetch(url, {method: methods[0]})
 
-    return await response.json()
+    return await response
 }
 
 
@@ -46,5 +44,5 @@ async function makeCall (method, data) {
         headers: {"Content-Type": "application/json"}
     })
         
-        return await response.json()
+        return await response
 }

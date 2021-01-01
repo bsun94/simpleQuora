@@ -2,9 +2,10 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 
 import UserContext from "../userContext.js"
-import db_tables from "../controllers/db_enums.js"
+import db_tables from "../enums/db_enums.js"
+import content_types from "../enums/content_type_enums.js"
 
-import { Voters } from '../controllers/voteQuestions.js'
+import { Voters } from '../controllers/voters.js'
 import DeleteButton from "../controllers/delete.js"
 
 export function QuestionDisplay (props) {
@@ -20,7 +21,7 @@ export function QuestionDisplay (props) {
         
         htmlOutput.push(
             <div className="headline question-headline" id={entry.id} >
-                <Voters id={entry.id} votes={entry.votes} getQ={props.getQ} />
+                <Voters id={entry.id} votes={entry.votes} content_type={content_types["Q"]} getQ={props.getQ} />
                 <Link className="textBody" to={`/answersToQuestion/${entry.id}`} >
                     <div className="author">{entry.author} asked:</div>
                     <div className="mainText">{entry.text}</div>

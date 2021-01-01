@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 
 import UserContext from "../userContext.js"
-import db_tables from "../controllers/db_enums.js"
+import db_tables from "../enums/db_enums.js"
 
-import Replies from "./replies.js"
+import Replies from "../controllers/replies.js"
 import DeleteButton from "../controllers/delete.js"
 
 export function CommentDisplay (props) {
@@ -33,7 +33,7 @@ export function CommentDisplay (props) {
                     }
                     <div className="mainText">{entry.text}</div>
                     <div className="date">on {date.toLocaleString('en-US', options)}</div>
-                    <Replies answer={entry.answer_id} replyto={entry.id} originalAuthor={entry.author} />
+                    <Replies answer={entry.answer_id} replyto={entry.id} originalAuthor={entry.author} originalText={entry.text} postRefresh={props.postRefresh} />
                 </div>
                 {entry.author === loginInfo.username ? <DeleteButton db={db_tables["C"]} entry_id={entry.id} delRefresh={delRefresh} /> : null}
 

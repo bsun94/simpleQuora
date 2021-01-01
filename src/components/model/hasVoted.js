@@ -1,5 +1,5 @@
-import methods from "./enums.js"
-import hosts from "./hosts.js"
+import methods from "../enums/enums.js"
+import hosts from "../enums/hosts.js"
 
 export async function getHasVoted(data) {
     var url

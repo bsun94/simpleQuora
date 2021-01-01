@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react'
 
 import UserContext from "../userContext.js"
+import ErrorContext from "../errorContext.js"
 
 import { getQuestions, postQuestions } from "../model/questions.js"
 
 import { QuestionDisplay } from "../views/question.js"
 import { MainPoster } from "../views/mainPoster.js"
 import { MainGetter } from "../views/mainGetter.js"
+
+import ErrorBox from "../views/errorDisplay.js"
 
 function AskScreen () {
     const [questionPost, setQuestionPost] = useState('')
@@ -17,6 +20,7 @@ function AskScreen () {
     const [pageMode, setPageMode] = useState('search')
 
     const loginInfo = useContext(UserContext)
+    const errorHandle = useContext(ErrorContext)
 
     async function getQ () {
         let params = {}
@@ -24,12 +28,25 @@ function AskScreen () {
             params["search"] = search
         }
         
-        setQuestionGet(await getQuestions(params))
+        let response = await getQuestions(params)
+        let body = await response.json()
+
+        if (response.status >= 400) {
+            errorHandle.setError(<ErrorBox msg="getting questions" response={body} />)
+        } else {
+            setQuestionGet(body)
+        }
     }
 
     async function postQ () {
         let response = await postQuestions({"text": questionPost, "author": loginInfo.username})
-        setQuestionGet([response, ...questionGet])
+        let body = await response.json()
+
+        if (response.status >= 400) {
+            errorHandle.setError(<ErrorBox msg="posting questions" response={body} />)
+        } else {
+            setQuestionGet([body, ...questionGet])
+        }
     }
 
     function refreshAfterDelete (index) {

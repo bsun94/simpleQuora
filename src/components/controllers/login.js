@@ -8,7 +8,7 @@ import UserContext from '../userContext.js'
 import Navigator from './navigation.js'
 
 function Login () {
-    const [userID, setUserID ] = useState(Number())
+    const [userID, setUserID ] = useState(null)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 

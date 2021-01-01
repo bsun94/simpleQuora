@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 
 import { postComments } from "../model/comments.js"
 
-import UserContext from "../userContext"
+import UserContext from "../userContext.js"
 
 function Replies (props) {
     const [text, setText] = useState('')
@@ -11,12 +11,18 @@ function Replies (props) {
     const loginInfo = useContext(UserContext)
 
     async function postC () {
-        await postComments({
+        let response = await postComments({
             "text": text,
             "author": loginInfo.username,
             "answer": props.answer,
             "replyto": props.replyto
         })
+
+        let body = await response.json()
+        body["originalauthor"] = props.originalAuthor
+        body["originaltext"] = props.originalText
+
+        props.postRefresh(response, body)
     }
 
     function expandPoster () {

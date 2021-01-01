@@ -1,5 +1,5 @@
-import methods from "./enums.js"
-import hosts from "./hosts.js"
+import methods from "../enums/enums.js"
+import hosts from "../enums/hosts.js"
 
 export async function getComments(data) {
     var url
@@ -21,7 +21,7 @@ export async function getComments(data) {
 
     let response = await fetch(url, {method: methods[0]})
 
-    return await response.json()
+    return await response
 }
 
 
@@ -44,5 +44,5 @@ async function makeCall (method, data) {
         headers: {"Content-Type": "application/json"}
     })
         
-        return await response.json()
+        return await response
 }
