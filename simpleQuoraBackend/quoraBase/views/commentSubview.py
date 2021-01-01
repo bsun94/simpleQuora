@@ -65,19 +65,8 @@ def delete(request):
     return Response({"Error": "Invalid input for ID"}, status=404)
 
 def patch(request):
-    # Patching only done for voting
-    try:
-        vote = int(request.data.get("votes"))
-    except:
-        return Response({"Error": "Invalid input for votes"}, status=400)
-    
-    id = request.data.get("id")
-    if id:
-        try:
-            Comments.objects.filter(pk=id).update(votes=vote)
-            return Response({"Success": "Record updated"}, status=200)
-        except:
-            return Response({"Error": "Stated ID does not exist"}, status=400)
+    # For future implementation on text
+    pass
 
 def dictfetchall(cursor):
     # To convert cursor results - from raw SQL - to dict for serialization

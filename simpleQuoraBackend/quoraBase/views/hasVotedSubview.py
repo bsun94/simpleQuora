@@ -8,7 +8,10 @@ from ..serializers import getHasVoted
 def hasvoted(request):
 
     if request.method == 'GET':
-        return get(request)
+        if request.GET.get("user_id"):
+            return get_user_has_voted(request)
+        else:
+            return get_count(request)
 
     elif request.method == "POST":
         return post(request)
@@ -19,12 +22,9 @@ def hasvoted(request):
     elif request.method == 'PATCH':
         return patch(request)
 
-def get(request):
+def get_user_has_voted(request):
     user_id = request.GET.get("user_id")
     query = HasVoted.objects.filter(user=user_id)
-
-    if not query.exists():
-        return Response({"Error": "Invalid input for ID"}, status=404)
     
     if request.GET.get("question"):
         content_id = request.GET.get("question")
@@ -33,11 +33,25 @@ def get(request):
         content_id = request.GET.get("answer")
         query = query.filter(answer=content_id)
     
-    if not query.exists():
-        return Response({"Error": "Requested entry not found"}, status=400)
+    if query.exists():
+        has_voted = True
+    else:
+        has_voted = False
 
-    serializer = getHasVoted(query, many=True)
-    return Response(serializer.data, status=200)
+    return Response({"has_voted": has_voted}, status=200)
+
+def get_count(request):
+    if request.GET.get("question"):
+        content_id = request.GET.get("question")
+        query = HasVoted.objects.filter(question=content_id)
+    elif request.GET.get("answer"):
+        content_id = request.GET.get("answer")
+        query = HasVoted.objects.filter(answer=content_id)
+    
+    upvotes = query.filter(vote_type='up').count()
+    downvotes = query.filter(vote_type='down').count()
+
+    return Response({"votes": upvotes - downvotes}, status=200)
 
 def post(request):
     serializer = getHasVoted(data=request.data)
