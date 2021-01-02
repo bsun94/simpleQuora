@@ -30,7 +30,7 @@ function Login () {
                 "'" + Object.keys(body) + "': " + Object.values(body)[0]
                 )
         } else {
-            setUserID(body[0]["id"])
+            setUserID(body["id"])
             setLoginStatus('')
             setLoggedIn(true)
         }
