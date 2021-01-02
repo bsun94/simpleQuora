@@ -30,7 +30,7 @@ SECRET_KEY = creds['DJANGO_SEC_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['SimpleQuora-env.eba-zfhpnhsm.us-east-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['simpleQuora-env.eba-pc3vmtbs.us-east-2.elasticbeanstalk.com', 'quora.bsun-awseb.com']
 
 
 # Application definition
