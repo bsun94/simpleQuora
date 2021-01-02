@@ -28,9 +28,9 @@ with open('simpleQuora/db_credentials.json', 'r') as f:
 SECRET_KEY = creds['DJANGO_SEC_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['SimpleQuora-env.eba-zfhpnhsm.us-east-2.elasticbeanstalk.com']
 
 
 # Application definition
