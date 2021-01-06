@@ -1,7 +1,7 @@
 import requests
 import json
 
-class awsHelper:
+class awsElasticsearchHelper:
     """
     A helper class to handle AWS Elasticsearch posts and gets. Object initialization takes three arguments:
 

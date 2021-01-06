@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import cookie from 'react-cookies'
 
 import { getUsers, postUsers } from "../model/user.js"
 import { sha256 } from "../model/hash.js"
@@ -20,6 +21,14 @@ function Login () {
         setUserID, setUsername, setLoggedIn 
     }
 
+    useEffect(() => {
+        if (cookie.load('userID') !== undefined && cookie.load('username') !== undefined) {
+            setUserID(cookie.load('userID'))
+            setUsername(cookie.load('username'))
+            setLoggedIn(true)
+        }
+    }, [])
+
     async function register() {
         let pw = await sha256(password)
         let response = await postUsers({"username": username, "password": pw})
@@ -32,6 +41,10 @@ function Login () {
         } else {
             setUserID(body["id"])
             setLoginStatus('')
+
+            cookie.save('userID', body["id"], {path: '/', maxAge: 60 * 60 * 24})
+            cookie.save('username', username, {path: '/', maxAge: 60 * 60 * 24})
+
             setLoggedIn(true)
         }
     }
@@ -49,6 +62,10 @@ function Login () {
             } else {
                 setUserID(body[0]["id"])
                 setLoginStatus('')
+
+                cookie.save('userID', body[0]["id"], {path: '/', maxAge: 60 * 60 * 24})
+                cookie.save('username', username, {path: '/', maxAge: 60 * 60 * 24})
+                
                 setLoggedIn(true)
             }
         }

@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from ..models import Questions
 from ..serializers import getQuestions
 
-from .awsHelper import awsHelper
+from .awsElasticsearchHelper import awsElasticsearchHelper
 
 # Replace with the info of your own AWS Elasticsearch instance
 HOST = "https://search-simplequora-6h3qxmhww5y2w6coxegz7q4tki.us-east-2.es.amazonaws.com/"
@@ -17,7 +17,7 @@ INDICES = ""
 # file provided and link to there (refer to AWS_ES_setup in ../simpleQuora)
 CREDS_FILE = './quoraBase/views/credentials.json'
 
-aws = awsHelper(HOST, DOMAIN, INDICES, CREDS_FILE)
+aws = awsElasticsearchHelper(HOST, DOMAIN, INDICES, CREDS_FILE)
 
 @api_view(['GET', 'POST', 'DELETE', 'PATCH'])
 def questions(request):
