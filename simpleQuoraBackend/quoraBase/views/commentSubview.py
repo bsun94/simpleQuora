@@ -65,8 +65,17 @@ def delete(request):
     return Response({"Error": "Invalid input for ID"}, status=404)
 
 def patch(request):
-    # For future implementation on text
-    pass
+    text = request.data.get("text")
+    if not text:
+        return Response({"Error": "Missing input for comment text"}, status=404)
+
+    id = request.data.get("id")
+    if id:
+        try:
+            Comments.objects.filter(pk=id).update(text=text)
+            return Response({"Success": "Record updated"}, status=200)
+        except:
+            return Response({"Error": "Record failed to update"}, status=404)
 
 def dictfetchall(cursor):
     # To convert cursor results - from raw SQL - to dict for serialization
