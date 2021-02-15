@@ -330,6 +330,7 @@ body {
 }
 
 .deletor {
+  height: 30px;
   width: 60px;
   background-color: lightgray;
   color: black;
@@ -344,6 +345,25 @@ body {
   cursor: pointer;
   background-color: black;
   color: lightgray;
+}
+
+.patcher {
+  height: 30px;
+  width: 60px;
+  margin-bottom: 5px;
+  background-color: lightgoldenrodyellow;
+  color: maroon;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  border: maroon 2px solid;
+  border-radius: 5px;
+}
+
+.patcher:hover {
+  cursor: pointer;
+  background-color: lightgoldenrodyellow;
+  color: maroon;
 }
 
 /* 5. Error Handler Box */
@@ -367,4 +387,24 @@ body {
 
 .errorList{
   margin-bottom: 20px;
+}
+
+/* 6. Editing floating box for all content */
+
+.repliesNotebox {
+  position: fixed;
+  text-align: center;
+  top: 30vh;
+  left: 37.5vw;
+  right: 37.5vw;
+  z-index: 100;
+  min-height: 10vh;
+  width: 25vw;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: white;
+  border: 2px black solid;
+  box-shadow: black 3px 3px 5px 2px;
 }

@@ -7,6 +7,7 @@ import content_types from "../enums/content_type_enums.js"
 
 import { Voters } from '../controllers/voters.js'
 import DeleteButton from "../controllers/delete.js"
+import EditButton from "../controllers/update.js"
 
 export function QuestionDisplay (props) {
     const loginInfo = useContext(UserContext)
@@ -18,6 +19,18 @@ export function QuestionDisplay (props) {
         let options = {dateStyle: 'long', timeStyle: 'short'}
 
         let delRefresh = () => props.delRefresh(i)
+        let patRefresh = (text) => props.patchRefresh(i, text)
+
+        let additionalButtons = () => {
+            if (entry.author === loginInfo.username) {
+                return (
+                    <div>
+                        <EditButton db={db_tables["Q"]} entry_id={entry.id} patchRefresh={patRefresh} />
+                        <DeleteButton db={db_tables["Q"]} entry_id={entry.id} delRefresh={delRefresh} />
+                    </div>
+                )
+            }
+        }
         
         htmlOutput.push(
             <div className="headline question-headline" id={entry.id} >
@@ -27,7 +40,8 @@ export function QuestionDisplay (props) {
                     <div className="mainText">{entry.text}</div>
                     <div className="date">on {date.toLocaleString('en-US', options)}</div>
                 </Link>
-                {entry.author === loginInfo.username ? <DeleteButton db={db_tables["Q"]} entry_id={entry.id} delRefresh={delRefresh} /> : null}
+
+                {additionalButtons()}
             
             </div>
         )

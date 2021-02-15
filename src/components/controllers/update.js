@@ -31,6 +31,8 @@ function EditButton (props) {
         } else {
             props.patchRefresh(text)
         }
+
+        expandEditor()
     }
 
     function expandEditor () {
@@ -42,17 +44,22 @@ function EditButton (props) {
     }
 
     const mode = {
-        "on": <span>
+        "on":
+        <div className="repliesNotebox"> 
+            <div className="mainText">What would you like to change it to?</div>
             <input type="text" className="repliesInput" placeholder="Input new text here!" onChange={e => setText(e.target.value)} />
+            <br />
             <button className="repliesPoster" onClick={editElement} >Edit!</button>
-        </span>,
+            <br />
+            <button className="repliesPoster" onClick={expandEditor} >Cancel</button>
+        </div>,
         "off": <div /> 
     }
 
     return (
         <div>
-            <button className="editor" onClick={expandEditor} >Edit</button>
-            {mode[activated]}
+            <button className="patcher" onClick={expandEditor} >Edit</button>
+                {mode[activated]}
         </div>
     )
 }

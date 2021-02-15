@@ -7,7 +7,7 @@ import ErrorContext from "../errorContext.js"
 import { getAnswers } from "../model/answers.js"
 import { getComments, postComments } from "../model/comments.js"
 
-import { AnswerDisplay } from "../views/answer.js";
+import { AnswerDisplay } from "../views/answer.js"
 import { CommentDisplay } from "../views/comment.js"
 import { MainPoster } from "../views/mainPoster.js"
 
@@ -76,6 +76,12 @@ function SeeComments (props) {
         setCommentGet(newArr)
     }
 
+    function refreshAfterPatch (index, text) {
+        let newArr = [...commentGet]
+        newArr[index].text = text
+        setCommentGet(newArr)
+    }
+
     useEffect(() => {
         getA()
         getC()
@@ -91,7 +97,7 @@ function SeeComments (props) {
             </div>
             <MainPoster setFunc={setCommentPost} postFunc={postC} placeholder="Comment..." buttonText="Post Comment" />
             <AnswerDisplay answers={answerGet} getA={getA} />
-            <CommentDisplay comments={commentGet} getC={getC} delRefresh={refreshAfterDelete} postRefresh={refreshAfterPost} />
+            <CommentDisplay comments={commentGet} getC={getC} delRefresh={refreshAfterDelete} patchRefresh={refreshAfterPatch} postRefresh={refreshAfterPost} />
         </div>
     )
 }

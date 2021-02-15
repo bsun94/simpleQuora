@@ -5,6 +5,7 @@ import db_tables from "../enums/db_enums.js"
 
 import Replies from "../controllers/replies.js"
 import DeleteButton from "../controllers/delete.js"
+import EditButton from "../controllers/update.js"
 
 export function CommentDisplay (props) {
     const loginInfo = useContext(UserContext)
@@ -16,6 +17,18 @@ export function CommentDisplay (props) {
         let options = {dateStyle: 'long', timeStyle: 'short'}
 
         let delRefresh = () => props.delRefresh(i)
+        let patRefresh = (text) => props.patchRefresh(i, text)
+
+        let additionalButtons = () => {
+            if (entry.author === loginInfo.username) {
+                return (
+                    <div>
+                        <EditButton db={db_tables["C"]} entry_id={entry.id} patchRefresh={patRefresh} />
+                        <DeleteButton db={db_tables["C"]} entry_id={entry.id} delRefresh={delRefresh} />
+                    </div>
+                )
+            }
+        }
         
         htmlOutput.push(
             <div className="headline comment-headline" id={entry.id}>                
@@ -35,7 +48,8 @@ export function CommentDisplay (props) {
                     <div className="date">on {date.toLocaleString('en-US', options)}</div>
                     <Replies answer={entry.answer_id} replyto={entry.id} originalAuthor={entry.author} originalText={entry.text} postRefresh={props.postRefresh} />
                 </div>
-                {entry.author === loginInfo.username ? <DeleteButton db={db_tables["C"]} entry_id={entry.id} delRefresh={delRefresh} /> : null}
+
+                {additionalButtons()}
 
             </div>
         )

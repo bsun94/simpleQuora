@@ -60,6 +60,12 @@ function SeeAnswers (props) {
         setAnswerGet(newArr)
     }
 
+    function refreshAfterPatch (index, text) {
+        let newArr = [...answerGet]
+        newArr[index].text = text
+        setAnswerGet(newArr)
+    }
+
     useEffect(() => {
         getQ()
         getA()
@@ -74,7 +80,7 @@ function SeeAnswers (props) {
             </div>
             <MainPoster setFunc={setAnswerPost} postFunc={postA} placeholder="Help the asker out!" buttonText="Answer!" />
             <QuestionDisplay questions={questionGet} getQ={getQ} />
-            <AnswerDisplay answers={answerGet} getA={getA} delRefresh={refreshAfterDelete} />
+            <AnswerDisplay answers={answerGet} getA={getA} delRefresh={refreshAfterDelete} patchRefresh={refreshAfterPatch} />
         </div>
     )
 }

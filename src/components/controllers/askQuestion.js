@@ -55,6 +55,12 @@ function AskScreen () {
         setQuestionGet(newArr)
     }
 
+    function refreshAfterPatch (index, text) {
+        let newArr = [...questionGet]
+        newArr[index].text = text
+        setQuestionGet(newArr)
+    }
+
     useEffect(() => getQ(), [])
 
     const mode = {
@@ -69,7 +75,7 @@ function AskScreen () {
                 <button className="mainButton" onClick={e => setPageMode('search')}>See what's been asked!</button>
             </div>
             {mode[pageMode]}
-            <QuestionDisplay questions={questionGet} getQ={getQ} delRefresh={refreshAfterDelete} />
+            <QuestionDisplay questions={questionGet} getQ={getQ} delRefresh={refreshAfterDelete} patchRefresh={refreshAfterPatch} />
         </div>
     )
 }
