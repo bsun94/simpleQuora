@@ -8,7 +8,7 @@ from ..serializers import getHasVoted
 def hasvoted(request):
 
     if request.method == 'GET':
-        if request.GET.get("user_id"):
+        if request.GET.get("user"):
             return get_user_has_voted(request)
         else:
             return get_count(request)
@@ -23,8 +23,11 @@ def hasvoted(request):
         return patch(request)
 
 def get_user_has_voted(request):
-    user_id = request.GET.get("user_id")
-    query = HasVoted.objects.filter(user=user_id)
+    user = request.GET.get("user")
+    if not user:
+        return Response({"Error": "Unspecified user ID"}, status=400)
+
+    query = HasVoted.objects.filter(user=user)
     
     if request.GET.get("question"):
         content_id = request.GET.get("question")
@@ -32,6 +35,8 @@ def get_user_has_voted(request):
     elif request.GET.get("answer"):
         content_id = request.GET.get("answer")
         query = query.filter(answer=content_id)
+    else:
+        return Response({"Error": "Unspecified question/answer ID"}, status=400)
     
     if query.exists():
         has_voted = True
@@ -47,6 +52,8 @@ def get_count(request):
     elif request.GET.get("answer"):
         content_id = request.GET.get("answer")
         query = HasVoted.objects.filter(answer=content_id)
+    else:
+        return Response({"Error": "Unspecified question/answer ID"}, status=400)
     
     upvotes = query.filter(vote_type='up').count()
     downvotes = query.filter(vote_type='down').count()
@@ -54,6 +61,9 @@ def get_count(request):
     return Response({"votes": upvotes - downvotes}, status=200)
 
 def post(request):
+    if not request.data.get('question') and not request.data.get('answer'):
+        return Response({"Error": "Unspecified question/answer ID"}, status=400)
+        
     serializer = getHasVoted(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -61,42 +71,52 @@ def post(request):
     return Response(serializer.errors, status=400)
 
 def delete(request):
-    user_id = request.GET.get("user_id")
-    query = HasVoted.objects.filter(user=user_id)
+    user = request.data.get("user")
+    if not user:
+        return Response({"Error": "Missing user ID"}, status=404)
+
+    query = HasVoted.objects.filter(user=user)
 
     if not query.exists():
-        return Response({"Error": "Invalid input for ID"}, status=404)
+        return Response({"Error": "Unrecognized user ID"}, status=404)
     
-    if request.GET.get("question"):
-        content_id = request.GET.get("question")
+    if request.data.get("question"):
+        content_id = request.data.get("question")
         query = query.filter(question=content_id)
-    elif request.GET.get("answer"):
-        content_id = request.GET.get("answer")
+    elif request.data.get("answer"):
+        content_id = request.data.get("answer")
         query = query.filter(answer=content_id)
+    else:
+        return Response({"Error": "Unspecified question/answer ID"}, status=400)
     
     try:
         query.delete()
         return Response({"Success": "Record deleted"}, status=202)
     except:
-        return Response({"Error": "Stated ID does not exist"}, status=404)
+        return Response({"Error": "Delete operation failed"}, status=500)
 
 def patch(request):
-    user_id = request.data.get("user_id")
-    query = HasVoted.objects.filter(user=user_id)
+    user = request.data.get("user")
+    if not user:
+        return Response({"Error": 'Missing user ID'}, status=404)
+
+    query = HasVoted.objects.filter(user=user)
 
     if not query.exists():
-        return Response({"Error": "Invalid input for ID"}, status=404)
+        return Response({"Error": "Unrecognized user ID"}, status=404)
     
-    if request.GET.get("question"):
-        content_id = request.GET.get("question")
+    if request.data.get("question"):
+        content_id = request.data.get("question")
         query = query.filter(question=content_id)
-    elif request.GET.get("answer"):
-        content_id = request.GET.get("answer")
+    elif request.data.get("answer"):
+        content_id = request.data.get("answer")
         query = query.filter(answer=content_id)
+    else:
+        return Response({"Error": "Unspecified question/answer ID"}, status=400)
 
     vote_type = request.data.get("vote_type")
     try:
         query.update(vote_type=vote_type)
         return Response({"Success": "Record updated"}, status=200)
     except:
-        return Response({"Error": "Invalid content instance (i.e. the question or answer looked-for) queried"}, status=400)
+        return Response({"Error": "Invalid vote type (i.e. the question or answer looked-for) queried"}, status=400)

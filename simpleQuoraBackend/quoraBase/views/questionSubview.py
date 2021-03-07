@@ -49,11 +49,11 @@ def get(request):
 
                 if time:
                     query = query.filter(
-                        q_creation_time__gte=date.today()-timedelta(days=int(time))
+                        creation_time__gte=date.today()-timedelta(days=int(time))
                     )
             elif time:
                 query = Questions.objects.filter(
-                        q_creation_time__gte=date.today()-timedelta(days=int(time))
+                        creation_time__gte=date.today()-timedelta(days=int(time))
                     ).order_by('-creation_time')
                 
     else:
@@ -99,3 +99,5 @@ def patch(request):
             return Response({"Success": "Record updated"}, status=200)
         except:
             return Response({"Error": "Record failed to update"}, status=404)
+    else:
+        return Response({"Error": "Missing question ID"}, status=404)

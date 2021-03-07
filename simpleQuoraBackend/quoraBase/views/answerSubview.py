@@ -24,15 +24,15 @@ def get(request):
     question_id = request.GET.get("question_id")
 
     if id:
-        try:
-            answerQuery = Answers.objects.filter(pk=id)
-        except:
+        answerQuery = Answers.objects.filter(pk=id)
+        if not answerQuery:
             return Response({"Error": "Missing or Invalid Answer ID"}, status=400)
     elif question_id:
-        try:
-            answerQuery = Answers.objects.filter(question_id=question_id)
-        except:
+        answerQuery = Answers.objects.filter(question_id=question_id)
+        if not answerQuery:
             return Response({"Error": "Missing or Invalid Question ID"}, status=400)
+    else:
+        return Response({"Error": "No Answer or Question ID found"}, status=400)
 
     answerSerializer = getAnswers(answerQuery, many=True)
     return Response(answerSerializer.data)
@@ -68,3 +68,5 @@ def patch(request):
             return Response({"Success": "Record updated"}, status=200)
         except:
             return Response({"Error": "Record failed to update"}, status=404)
+    else:
+        return Response({"Error": "Missing answer ID"}, status=404)

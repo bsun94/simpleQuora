@@ -53,12 +53,12 @@ def patch(request):
     username = request.data.get("username")
     password = request.data.get("password")
 
-    try:
+    if id:
         if username:
             Users.objects.filter(pk=id).update(username=username)
         elif password:
             Users.objects.filter(pk=id).update(password=password)
 
         return Response({"Success": "Record updated"}, status=200)
-    except:
+    else:
         return Response({"Error": "Invalid user input"}, status=400)

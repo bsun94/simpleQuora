@@ -24,23 +24,23 @@ def comments(request):
 def get(request):
     answer_id = request.GET.get("answer_id")
 
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                'SELECT c1.id as id \
-                , c1.text as text \
-                , c1.author as author \
-                , c1.creation_time as creation_time \
-                , c1.answer_id as answer_id \
-                , c1.replyto_id as replyto \
-                , c2.text as originalText \
-                , c2.author as originalAuthor \
-                FROM comments as c1 LEFT JOIN comments as c2 ON c1.replyto_id = c2.id \
-                WHERE c1.answer_id = %s \
-                ORDER BY c1.creation_time ASC;',
-                [answer_id])
-            query = dictfetchall(cursor)  # see at the bottom
-    except:
+    with connection.cursor() as cursor:
+        cursor.execute(
+            'SELECT c1.id as id \
+            , c1.text as text \
+            , c1.author as author \
+            , c1.creation_time as creation_time \
+            , c1.answer_id as answer_id \
+            , c1.replyto_id as replyto \
+            , c2.text as originalText \
+            , c2.author as originalAuthor \
+            FROM comments as c1 LEFT JOIN comments as c2 ON c1.replyto_id = c2.id \
+            WHERE c1.answer_id = %s \
+            ORDER BY c1.creation_time ASC;',
+            [answer_id])
+        query = dictfetchall(cursor)  # see at the bottom
+    
+    if not query:
         return Response({"Error": "Missing or Invalid Answer ID"}, status=400)
 
     return Response(query)
@@ -76,6 +76,8 @@ def patch(request):
             return Response({"Success": "Record updated"}, status=200)
         except:
             return Response({"Error": "Record failed to update"}, status=404)
+    else:
+        return Response({"Error": "Missing Comment ID"}, status=404)
 
 def dictfetchall(cursor):
     # To convert cursor results - from raw SQL - to dict for serialization
