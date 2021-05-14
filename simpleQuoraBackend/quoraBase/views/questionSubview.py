@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from ..models import Questions
 from ..serializers import getQuestions
 
-from .awsElasticsearchHelper import awsElasticsearchHelper
+# from .awsElasticsearchHelper import awsElasticsearchHelper
 
 # Replace with the info of your own AWS Elasticsearch instance
 HOST = "https://search-simplequora-6h3qxmhww5y2w6coxegz7q4tki.us-east-2.es.amazonaws.com/"
@@ -17,7 +17,7 @@ INDICES = ""
 # file provided and link to there (refer to AWS_ES_setup in ../simpleQuora)
 CREDS_FILE = './quoraBase/views/credentials.json'
 
-aws = awsElasticsearchHelper(HOST, DOMAIN, INDICES, CREDS_FILE)
+# aws = awsElasticsearchHelper(HOST, DOMAIN, INDICES, CREDS_FILE)
 
 @api_view(['GET', 'POST', 'DELETE', 'PATCH'])
 def questions(request):
@@ -44,13 +44,17 @@ def get(request):
             time = request.GET.get("creation_time")
 
             if search:
-                indices = aws.getter(search)
-                query = Questions.objects.filter(id__in=indices).order_by('-creation_time')
+                # indices = aws.getter(search)
+                # query = Questions.objects.filter(id__in=indices).order_by('-creation_time')
+                
+                # if time:
+                #     query = query.filter(
+                #         creation_time__gte=date.today()-timedelta(days=int(time))
+                #     )
 
-                if time:
-                    query = query.filter(
-                        creation_time__gte=date.today()-timedelta(days=int(time))
-                    )
+                # placeholder for now - in case reactivation of AWS ES desired in future
+                pass
+            
             elif time:
                 query = Questions.objects.filter(
                         creation_time__gte=date.today()-timedelta(days=int(time))
@@ -66,10 +70,10 @@ def post(request):
     serializer = getQuestions(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        resp = aws.poster(serializer.data)
+        # resp = aws.poster(serializer.data)
 
-        if resp["_shards"]["successful"] == 0:
-            return Response({"Error": "Upload to AWS Elasticsearch has failed"}, status=500)
+        # if resp["_shards"]["successful"] == 0:
+        #     return Response({"Error": "Upload to AWS Elasticsearch has failed"}, status=500)
 
         return Response(serializer.data, status=201)
     
