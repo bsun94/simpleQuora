@@ -17,7 +17,7 @@ function AskScreen () {
 
     const [search, setSearch] = useState('')
 
-    const [pageMode, setPageMode] = useState('search')
+    const [pageMode, setPageMode] = useState('ask')
 
     const loginInfo = useContext(UserContext)
     const errorHandle = useContext(ErrorContext)
@@ -75,7 +75,7 @@ function AskScreen () {
             <div className="pageTopSwitch">
                 <button className="mainButton" onClick={e => setPageMode('ask')}>Ask the Kworah Community!</button>
                 {/* <button className="mainButton" onClick={e => setPageMode('search')}>See what's been asked!</button> */}
-                <button className="mainButton"><i>Search disabled due to AWS cost</i></button>
+                <button className="mainButton"><i>Search disabled due to costs</i></button>
             </div>
             {mode[pageMode]}
             <QuestionDisplay questions={questionGet} getQ={getQ} delRefresh={refreshAfterDelete} patchRefresh={refreshAfterPatch} />
